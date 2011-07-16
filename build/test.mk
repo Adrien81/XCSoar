@@ -667,7 +667,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunAnalysis \
 	RunAirspaceWarningDialog \
 	TestNotify \
-	DebugDisplay
+	DebugDisplay \
+	RunLiveTrack24
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -773,6 +774,30 @@ RUN_NOAA_DOWNLOADER_LDADD = $(IO_LIBS) $(LIBNET_LIBS)
 $(RUN_NOAA_DOWNLOADER_BIN): LDLIBS += $(LIBNET_LDLIBS)
 $(RUN_NOAA_DOWNLOADER_BIN): CPPFLAGS += $(LIBNET_CPPFLAGS)
 $(RUN_NOAA_DOWNLOADER_BIN): $(RUN_NOAA_DOWNLOADER_OBJS) $(RUN_NOAA_DOWNLOADER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_LIVETRACK24_SOURCES = \
+	$(SRC)/Tracking/LiveTrack24.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Operation.cpp \
+	$(SRC)/DateTime.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/Net/ToBuffer.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
+	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
+	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
+RUN_LIVETRACK24_OBJS = $(call SRC_TO_OBJ,$(RUN_LIVETRACK24_SOURCES))
+RUN_LIVETRACK24_BIN = $(TARGET_BIN_DIR)/RunLiveTrack24$(TARGET_EXEEXT)
+RUN_LIVETRACK24_LDADD = $(IO_LIBS) $(LIBNET_LIBS) $(MATH_LIBS)
+$(RUN_LIVETRACK24_BIN): LDLIBS += $(LIBNET_LDLIBS)
+$(RUN_LIVETRACK24_BIN): CPPFLAGS += $(LIBNET_CPPFLAGS)
+$(RUN_LIVETRACK24_BIN): $(RUN_LIVETRACK24_OBJS) $(RUN_LIVETRACK24_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
