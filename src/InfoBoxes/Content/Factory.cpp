@@ -408,7 +408,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // e_H_Baro
   {
     N_("Barometric altitude"),
-    N_("Alt. Baro."),
+    N_("Alt Baro"),
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
     IBFHelper<InfoBoxContentAltitudeBaro>::Create,
     e_H_QFE, // QFE GPS
